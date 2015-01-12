@@ -1,35 +1,58 @@
 var canvasWidth = canvas.width;
 var canvasHeight = canvas.height;
-var frameRate = 60;
+var frameRate = 120;
 var boidsContext = document.getElementById("canvas").getContext("2d");
 var info = document.getElementById("info");
-var chartContext = document.getElementById("chart").getContext("2d");
+var genomeChartContext = document.getElementById("genomeChart").getContext("2d");
+var genomeChart;
+var fitnessChartContext = document.getElementById("fitnessChart").getContext("2d");
+var fitnessChart;
+var allGenomesChartContext = document.getElementById("allGenomesChart").getContext("2d");
+var allGenomesChart;
+var allFitnessesChartContext = document.getElementById("allFitnessesChart").getContext("2d");
+var allGenomesChart;
 Chart.defaults.global.animation = false;
 Chart.defaults.global.showTooltips = false;
-var chart = new Chart(chartContext).Line({
-  labels: ["0"],
+
+var genomeChart = new Chart(genomeChartContext).Line({
+  labels: [],
   datasets: [
     {
-      label: "0",
       strokeColor: "#800000",
-      data: [0]
+      data: []
     },
     {
       strokeColor: "#FF0000",
-      data: [0]
+      data: []
     },
     {
       strokeColor: "#008000",
-      data: [0]
+      data: []
     },
     {
       strokeColor: "#0000FF",
-      data: [0]
+      data: []
     },
     {
       strokeColor: "#00FFFF",
-      data: [0]
+      data: []
     },
+  ]
+},
+
+{
+  bezierCurve: false,
+  datasetFill: false,
+  pointDot: false,
+});
+
+var fitnessChart = new Chart(fitnessChartContext).Line({
+  labels: [],
+  datasets: [
+    {
+      strokeColor: "#000000",
+      data: []
+    }
   ]
 },
 
@@ -103,6 +126,7 @@ Flock.prototype = {
 
     // gather info about the boids
     var genomeAverages = [0,0,0,0,0,0];
+    var fitnessTotal = 0;
 
     // the possible reproducing boids
     var parentsList = [];
@@ -110,7 +134,8 @@ Flock.prototype = {
     // iterate over boids
     var boidsToBeKilled = {};
     for (var i = 0; i < this.boidList.length; i++) {
-      var resultObj = this.boidList[i].update(i, this.boidList);
+      var boid = this.boidList[i];
+      var resultObj = boid.update(i, this.boidList);
       var theseBoidsToBeKilled = resultObj.collidingBoids;
       if (theseBoidsToBeKilled.length > 0) {
         for (var j = 0; j < theseBoidsToBeKilled.length; j++) {
@@ -118,31 +143,44 @@ Flock.prototype = {
         }
       } else {
         if (resultObj.neighborCount > 0) {
-          parentsList.push(this.boidList[i]);
+          parentsList.push(boid);
         }
       }
 
       // contribute to average genome
       for (var j = 0; j < genomeAverages.length; j++) {
-        genomeAverages[j] += this.boidList[i].genome[j];
+        genomeAverages[j] += boid.genome[j];
       }
+      // contribute to average age
+      fitnessTotal += boid.age;
       // draw the updated boid
-      boidsContext.fillRect(this.boidList[i].position.x, this.boidList[i].position.y, 3, 3);
+      boidsContext.fillRect(boid.position.x, boid.position.y, 3, 3);
     }
 
-    if (this.timestep % frameRate == 0) {
+    if (this.timestep % (5*frameRate) == 0) {
       // calculate the averages
       for (var j = 0; j < genomeAverages.length; j++) {
         genomeAverages[j] /= this.boidList.length;
       }
 
-      chart.addData([
+      /*if (this.timestep % (20*frameRate) == 0) {
+        for (var i = 0; i < chart.datasets.length; i++) {
+          for (var j = 1; j < 20; j++) {
+            
+          }
+        }
+        chart.update();
+      }*/
+
+      genomeChart.addData([
         genomeAverages[0],
         genomeAverages[1],
         genomeAverages[2],
         genomeAverages[3],
         genomeAverages[4],
       ], this.timestep);
+
+      fitnessChart.addData([fitnessTotal/this.boidList.length], this.timestep);
 
       // calculate the standard deviations
       /*var genomeDeviations = [0,0,0,0,0,0];
@@ -201,6 +239,7 @@ var Boid = function (genome,x,y) {
   this.position = new Vector (x,y);
   this.randomStartVelocity();
   this.acceleration = new Vector(0,0);
+  this.age = 0;
 }
 
 Boid.prototype = {
@@ -304,6 +343,9 @@ Boid.prototype = {
 
     // do physics 
     this.iterateKinematics();
+    
+    // get older
+    this.age++;
 
     // return indices to be deleted if this boid and another boid have collided.
     if (boidsCollidingWithThisBoid.length > 0) {
