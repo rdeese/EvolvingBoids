@@ -1,6 +1,8 @@
 var canvasWidth = canvas.width;
 var canvasHeight = canvas.height;
 var frameRate = 120;
+var secondsPerDatapoint = 5;
+var numDataPoints = 30;
 var boidsContext = document.getElementById("canvas").getContext("2d");
 var info = document.getElementById("info");
 var genomeChartContext = document.getElementById("genomeChart").getContext("2d");
@@ -14,48 +16,100 @@ var allGenomesChart;
 Chart.defaults.global.animation = false;
 Chart.defaults.global.showTooltips = false;
 
-var genomeChart = new Chart(genomeChartContext).Line({
-  labels: [],
+var f;
+var saveAndResetCurrentCharts = function () {
+  allGenomesChart.datasets = allGenomesChart.datasets.concat(genomeChart.datasets);
+  allFitnessesChart.datasets = allFitnessesChart.datasets.concat(fitnessChart.datasets);
+  updateGlobalCharts();
+  resetCharts();
+  f = new Flock();
+  f.run();
+}
+
+var updateGlobalCharts = function () {
+  allGenomesChart.update();
+  allFitnessesChart.update();
+}
+
+var resetCharts = function () {
+  genomeChart = new Chart(genomeChartContext).Line({
+    labels: [0],
+    datasets: [
+      {
+        strokeColor: "rgba(128,0,0,0.5)",
+        data: [0]
+      },
+      {
+        strokeColor: "rgba(255,0,0,0.5)",
+        data: [0]
+      },
+      {
+        strokeColor: "rgba(0,128,0,0.5)",
+        data: [0]
+      },
+      {
+        strokeColor: "rgba(0,0,255,0.5)",
+        data: [0]
+      },
+      {
+        strokeColor: "rgba(0,255,255,0.5)",
+        data: [0]
+      },
+    ]
+  },
+  {
+    bezierCurve: false,
+    datasetFill: false,
+    pointDot: false,
+  });
+
+  fitnessChart = new Chart(fitnessChartContext).Line({
+    labels: [0],
+    datasets: [
+      {
+        strokeColor: "rgba(0,0,0,0.5)",
+        data: [0]
+      }
+    ]
+  },
+  {
+    bezierCurve: false,
+    datasetFill: false,
+    pointDot: false,
+  });
+}
+
+var theLabels = [];
+var dumbData = [];
+for (var i = 0; i <= numDataPoints; i++) {
+  theLabels.push(secondsPerDatapoint*frameRate*i);
+  dumbData.push(0);
+}
+
+var allGenomesChart = new Chart(allGenomesChartContext).Line({
+  labels: theLabels, 
   datasets: [
     {
-      strokeColor: "#800000",
-      data: []
-    },
-    {
-      strokeColor: "#FF0000",
-      data: []
-    },
-    {
-      strokeColor: "#008000",
-      data: []
-    },
-    {
-      strokeColor: "#0000FF",
-      data: []
-    },
-    {
-      strokeColor: "#00FFFF",
-      data: []
-    },
+      strokeColor: "rgba(0,0,0,0)",
+      data: dumbData
+    }
   ]
 },
-
 {
   bezierCurve: false,
   datasetFill: false,
   pointDot: false,
 });
 
-var fitnessChart = new Chart(fitnessChartContext).Line({
-  labels: [],
+var allFitnessesChart = new Chart(allFitnessesChartContext).Line({
+  labels: theLabels, 
   datasets: [
     {
-      strokeColor: "#000000",
-      data: []
+      strokeColor: "rgba(0,0,0,0)",
+      data: dumbData
     }
   ]
 },
-
 {
   bezierCurve: false,
   datasetFill: false,
@@ -75,11 +129,15 @@ var lonelyDeathProbability = 0.08;
 
 
 var setup = function() {
-  var f = new Flock();
+  resetCharts();
+  f = new Flock();
   f.run();
 }
 
 var Flock = function () {
+  this.timestep = 0;
+  this.boidList = [];
+
   var xstep = canvasWidth/Math.sqrt(startingNumberOfBoids);
   var ystep = canvasHeight/Math.sqrt(startingNumberOfBoids);
   var xstart = 0;
@@ -96,8 +154,6 @@ var Flock = function () {
 }
 
 Flock.prototype = {
-  timestep: 0,
-  boidList: [],
   evolveNewBoid: function (parentsList) {
     // decide on the parents
     var firstParent = this.boidList[Math.round(Math.random()*(this.boidList.length-1))];
@@ -157,7 +213,7 @@ Flock.prototype = {
       boidsContext.fillRect(boid.position.x, boid.position.y, 3, 3);
     }
 
-    if (this.timestep % (5*frameRate) == 0) {
+    if (this.timestep % (secondsPerDatapoint*frameRate) == 0) {
       // calculate the averages
       for (var j = 0; j < genomeAverages.length; j++) {
         genomeAverages[j] /= this.boidList.length;
@@ -194,22 +250,6 @@ Flock.prototype = {
       for (var j = 0; j < genomeAverages.length; j++) {
         genomeDeviations[j] = Math.sqrt(genomeDeviations[j]/this.boidList.length);
       }*/
-
-      // update the info div
-      /*info.innerHTML = "Genome values: " 
-        + genomeAverages[0].toExponential(2) + ", "
-        + genomeAverages[1].toExponential(2) + ", "
-        + genomeAverages[2].toExponential(2) + ", "
-        + genomeAverages[3].toExponential(2) + ", "
-        + genomeAverages[4].toExponential(2) + ", "
-        + genomeAverages[5].toExponential(2) + ", "
-        + "<br>Standard Deviations: " +
-        + genomeDeviations[0].toExponential(2) + ", "
-        + genomeDeviations[1].toExponential(2) + ", "
-        + genomeDeviations[2].toExponential(2) + ", "
-        + genomeDeviations[3].toExponential(2) + ", "
-        + genomeDeviations[4].toExponential(2) + ", "
-        + genomeDeviations[5].toExponential(2); */
     }
 
     // now kill the boids 
@@ -230,7 +270,12 @@ Flock.prototype = {
 
     this.timestep++;
 
-    setTimeout(this.run.bind(this), 1000/frameRate);
+    // do the next timestep, or else save the data and start over
+    if (this.timestep <= frameRate*secondsPerDatapoint*numDataPoints) {
+      setTimeout(this.run.bind(this), 1000/frameRate);
+    } else {
+      saveAndResetCurrentCharts();
+    }
   }
 }
 
