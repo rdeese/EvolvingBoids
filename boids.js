@@ -1,5 +1,9 @@
 var canvasWidth = canvas.width;
 var canvasHeight = canvas.height;
+var frameRate = 60;
+var canvas;
+var context;
+var info;
 // everything is arbitrary!
 var maxSpeed = 3;
 var minSpeed = 1;
@@ -8,12 +12,8 @@ var neighborDistance = 60;
 var collisionDistance = 6;
 var velocitySameness = 2;
 var startingNumberOfBoids = 150;
-var frameRate = 60;
 var mutationFactor = 0.2;
 var lonelyDeathProbability = 0.08;
-var canvas;
-var context;
-var info;
 
 var setup = function() {
 	canvas = document.getElementById("canvas");
@@ -79,12 +79,16 @@ Flock.prototype = {
     for (var i = 0; i < this.boidList.length; i++) {
       var resultObj = this.boidList[i].update(i, this.boidList);
       var theseBoidsToBeKilled = resultObj.collidingBoids;
-      for (var j = 0; j < theseBoidsToBeKilled.length; j++) {
-        boidsToBeKilled[theseBoidsToBeKilled[j]] = true;
+      if (theseBoidsToBeKilled.length > 0) {
+        for (var j = 0; j < theseBoidsToBeKilled.length; j++) {
+          boidsToBeKilled[theseBoidsToBeKilled[j]] = true;
+        }
+      } else {
+        if (resultObj.neighborCount > 0) {
+          parentsList.push(this.boidList[i]);
+        }
       }
-      if (resultObj.neighborCount > 0 && theseBoidsToBeKilled.length == 0) {
-        parentsList.push(this.boidList[i]);
-      }
+
       // contribute to average genome
       for (var j = 0; j < genomeAverages.length; j++) {
         genomeAverages[j] += this.boidList[i].genome[j];
@@ -196,9 +200,25 @@ Boid.prototype = {
     neighborContributedAcceleration.y += this.genome[4]*(this.acceleration.y - otherBoid.acceleration.y)
     return neighborContributedAcceleration;
   },
+
+  calculateAccelerationFromSelf: function () {
+    this.acceleration.x += this.acceleration.x*this.genome[1];
+    this.acceleration.y += this.acceleration.y*this.genome[1];
+    this.acceleration.x += this.velocity.x*this.genome[3];
+    this.acceleration.y += this.velocity.y*this.genome[3];
+  },
+
+  iterateKinematics: function() {
+    this.normalizeAcceleration();
+    this.velocity.x += this.acceleration.x;
+    this.velocity.y += this.acceleration.y;
+    this.normalizeVelocity();
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+    this.position.wrap(new Vector(canvasWidth, canvasHeight));
+  },
   
   update: function (thisBoidsIndex, boidList) {
-    this.dampAcceleration();
     var boidsCollidingWithThisBoid = [];
     var neighborCount = 0;
     var neighborContributedAcceleration = new Vector(0,0);
@@ -244,31 +264,19 @@ Boid.prototype = {
     }
 
     // apply genomic acceleration and velocity based changes
-    this.acceleration.x += this.acceleration.x*this.genome[1];
-    this.acceleration.y += this.acceleration.y*this.genome[1];
-    this.acceleration.x += this.velocity.x*this.genome[3];
-    this.acceleration.y += this.velocity.y*this.genome[3];
-    
-    this.normalizeAcceleration();
-    this.velocity.x += this.acceleration.x;
-    this.velocity.y += this.acceleration.y;
-    this.normalizeVelocity();
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
-    this.position.wrap(new Vector(canvasWidth, canvasHeight));
+    this.calculateAccelerationFromSelf();
+
+    // do physics 
+    this.iterateKinematics();
+
     // return indices to be deleted if this boid and another boid have collided.
-    if (boidsCollidingWithThisBoid.length == 0) {
-      return {
-              collidingBoids: [],
-              neighborCount: neighborCount
-             };
-    } else {
+    if (boidsCollidingWithThisBoid.length > 0) {
       boidsCollidingWithThisBoid.push(thisBoidsIndex);
-      return {
-              collidingBoids: boidsCollidingWithThisBoid,
-              neighborCount: neighborCount
-            };
     }
+    return {
+             collidingBoids: boidsCollidingWithThisBoid,
+             neighborCount: neighborCount
+           };
   }
 }
 
