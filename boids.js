@@ -1,9 +1,44 @@
 var canvasWidth = canvas.width;
 var canvasHeight = canvas.height;
 var frameRate = 60;
-var canvas;
-var context;
-var info;
+var boidsContext = document.getElementById("canvas").getContext("2d");
+var info = document.getElementById("info");
+var chartContext = document.getElementById("chart").getContext("2d");
+Chart.defaults.global.animation = false;
+Chart.defaults.global.showTooltips = false;
+var chart = new Chart(chartContext).Line({
+  labels: ["0"],
+  datasets: [
+    {
+      label: "0",
+      strokeColor: "#800000",
+      data: [0]
+    },
+    {
+      strokeColor: "#FF0000",
+      data: [0]
+    },
+    {
+      strokeColor: "#008000",
+      data: [0]
+    },
+    {
+      strokeColor: "#0000FF",
+      data: [0]
+    },
+    {
+      strokeColor: "#00FFFF",
+      data: [0]
+    },
+  ]
+},
+
+{
+  bezierCurve: false,
+  datasetFill: false,
+  pointDot: false,
+});
+
 // everything is arbitrary!
 var maxSpeed = 3;
 var minSpeed = 1;
@@ -11,14 +46,12 @@ var maxAcceleration = 1;
 var neighborDistance = 60;
 var collisionDistance = 6;
 var velocitySameness = 2;
-var startingNumberOfBoids = 150;
+var startingNumberOfBoids = 80;
 var mutationFactor = 0.2;
 var lonelyDeathProbability = 0.08;
 
+
 var setup = function() {
-	canvas = document.getElementById("canvas");
-	context = canvas.getContext("2d");
-  info = document.getElementById("info");
   var f = new Flock();
   f.run();
 }
@@ -66,7 +99,7 @@ Flock.prototype = {
   },
   run: function () {
     // clear the canvas
-    context.clearRect ( 0 , 0 , canvasWidth, canvasHeight);
+    boidsContext.clearRect ( 0 , 0 , canvasWidth, canvasHeight);
 
     // gather info about the boids
     var genomeAverages = [0,0,0,0,0,0];
@@ -94,7 +127,7 @@ Flock.prototype = {
         genomeAverages[j] += this.boidList[i].genome[j];
       }
       // draw the updated boid
-      context.fillRect(this.boidList[i].position.x, this.boidList[i].position.y, 3, 3);
+      boidsContext.fillRect(this.boidList[i].position.x, this.boidList[i].position.y, 3, 3);
     }
 
     if (this.timestep % frameRate == 0) {
@@ -103,8 +136,16 @@ Flock.prototype = {
         genomeAverages[j] /= this.boidList.length;
       }
 
+      chart.addData([
+        genomeAverages[0],
+        genomeAverages[1],
+        genomeAverages[2],
+        genomeAverages[3],
+        genomeAverages[4],
+      ], this.timestep);
+
       // calculate the standard deviations
-      var genomeDeviations = [0,0,0,0,0,0];
+      /*var genomeDeviations = [0,0,0,0,0,0];
       for (var i = 0; i < this.boidList.length; i++) {
         for (var j = 0; j < genomeAverages.length; j++) {
           var difference = this.boidList[i].genome[j] - genomeAverages[j];
@@ -114,10 +155,10 @@ Flock.prototype = {
 
       for (var j = 0; j < genomeAverages.length; j++) {
         genomeDeviations[j] = Math.sqrt(genomeDeviations[j]/this.boidList.length);
-      }
+      }*/
 
       // update the info div
-      info.innerHTML = "Genome values: " 
+      /*info.innerHTML = "Genome values: " 
         + genomeAverages[0].toExponential(2) + ", "
         + genomeAverages[1].toExponential(2) + ", "
         + genomeAverages[2].toExponential(2) + ", "
@@ -130,7 +171,7 @@ Flock.prototype = {
         + genomeDeviations[2].toExponential(2) + ", "
         + genomeDeviations[3].toExponential(2) + ", "
         + genomeDeviations[4].toExponential(2) + ", "
-        + genomeDeviations[5].toExponential(2); 
+        + genomeDeviations[5].toExponential(2); */
     }
 
     // now kill the boids 
@@ -177,11 +218,6 @@ Boid.prototype = {
     this.velocity.y = this.velocity.y*(minSpeed/magnitude);
   },
 
-  dampAcceleration: function () {
-    this.acceleration.x *= 0.7;
-    this.acceleration.y *= 0.7;
-  },
-
   normalizeAcceleration: function () {
     this.acceleration.normalize(0, maxAcceleration);
   },
@@ -192,20 +228,20 @@ Boid.prototype = {
 
   calculateAccelerationFromNeighbor: function (otherBoid) {
     var neighborContributedAcceleration = new Vector(0,0);
-    neighborContributedAcceleration.x += this.genome[0]*(this.position.x - otherBoid.position.x)
-    neighborContributedAcceleration.y += this.genome[0]*(this.position.y - otherBoid.position.y)
-    neighborContributedAcceleration.x += this.genome[2]*(this.velocity.x - otherBoid.velocity.x)
-    neighborContributedAcceleration.y += this.genome[2]*(this.velocity.y - otherBoid.velocity.y)
-    neighborContributedAcceleration.x += this.genome[4]*(this.acceleration.x - otherBoid.acceleration.x)
-    neighborContributedAcceleration.y += this.genome[4]*(this.acceleration.y - otherBoid.acceleration.y)
+    neighborContributedAcceleration.x += this.genome[4]*(otherBoid.position.x - this.position.x)
+    neighborContributedAcceleration.y += this.genome[4]*(otherBoid.position.y - this.position.y)
+    neighborContributedAcceleration.x += this.genome[3]*(otherBoid.velocity.x - this.velocity.x)
+    neighborContributedAcceleration.y += this.genome[3]*(otherBoid.velocity.y - this.velocity.y)
+    neighborContributedAcceleration.x += this.genome[2]*(otherBoid.acceleration.x - this.acceleration.x)
+    neighborContributedAcceleration.y += this.genome[2]*(otherBoid.acceleration.y - this.acceleration.y)
     return neighborContributedAcceleration;
   },
 
   calculateAccelerationFromSelf: function () {
-    this.acceleration.x += this.acceleration.x*this.genome[1];
-    this.acceleration.y += this.acceleration.y*this.genome[1];
-    this.acceleration.x += this.velocity.x*this.genome[3];
-    this.acceleration.y += this.velocity.y*this.genome[3];
+    this.acceleration.x += this.acceleration.x*this.genome[0];
+    this.acceleration.y += this.acceleration.y*this.genome[0];
+    this.acceleration.x += this.velocity.x*this.genome[1];
+    this.acceleration.y += this.velocity.y*this.genome[1];
   },
 
   iterateKinematics: function() {

@@ -1,0 +1,32 @@
+\documentclass{article}
+
+\usepackage{xcolor}
+\usepackage{amsmath}
+\definecolor{maroon}{HTML}{800000}
+\definecolor{red}{HTML}{FF0000}
+\definecolor{green}{HTML}{008000}
+\definecolor{blue}{HTML}{0000FF}
+\definecolor{teal}{HTML}{00FFFF}
+
+\newcommand*{\mathcolor}{}
+\def\mathcolor#1#{\mathcoloraux{#1}}
+\newcommand*{\mathcoloraux}[3]{%
+  \protect\leavevmode
+  \begingroup
+    \color#1{#2}#3%
+  \endgroup
+}
+
+\begin{document}
+$$a^{+} = a + \mathcolor{maroon}{g_0}a + \mathcolor{red}{g_1}v + \frac {1} {\lvert N \rvert} \sum_{x \in N}\bigg(\mathcolor{green}{g_2}(a_x-a)+\mathcolor{blue}{g_3}(v_x-v)+\mathcolor{teal}{g_4}(p_x-p)\bigg)$$
+where:\\
+\begin{align*}
+p&~ \text{is the boid's position}\\
+v&~ \text{is its velocity}\\
+a&~ \text{is its acceleration}\\
+N&~ \text{is the set of neighboring boids}\\
+\{g_0, \ldots, g_4\}&~ \text{is the genome of the boid}
+\end{align*}
+
+
+\end{document}
