@@ -1,3 +1,6 @@
+// Copyright Rupert Deese 2015
+// Licensed under the GNU GPL http://www.gnu.org/licenses/gpl.txt  
+
 var frameRate = 120;
 var secondsPerDatapoint = 5;
 var numDataPoints = 30;
