@@ -16,6 +16,14 @@ var allGenomesChart;
 Chart.defaults.global.animation = false;
 Chart.defaults.global.showTooltips = false;
 
+var boidWithRangeContext = document.getElementById("boidWithRange").getContext("2d");
+boidWithRangeContext.fillStyle = "rgba(128,0,0,0.3)";
+boidWithRangeContext.beginPath();
+boidWithRangeContext.arc(151,46,40,0,2*Math.PI);
+boidWithRangeContext.fill();
+boidWithRangeContext.fillStyle = "rgba(0,0,0,1)";
+boidWithRangeContext.fillRect(150,45,3,3);
+
 var f;
 var saveAndResetCurrentCharts = function () {
   allGenomesChart.datasets = allGenomesChart.datasets.concat(genomeChart.datasets);
@@ -123,7 +131,6 @@ var minSpeed = 1;
 var maxAcceleration = 1;
 var neighborDistance = 40;
 var collisionDistance = 4;
-var velocitySameness = 2;
 var startingNumberOfBoids = 120;
 var mutationFactor = 0.2;
 var lonelyDeathProbability = 0.08;

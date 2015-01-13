@@ -24,13 +24,20 @@ h3 {
   padding:0;
 }
 
+h4 {
+  position:relative;
+  left:-30px;
+  margin:0;
+  border:0;
+  padding:0;
+}
+
 h1 {
   position:relative;
   margin-top:50px;
   margin-bottom:0px;
   text-align:center;
 }
-
 
 h2 {
   text-align:center;
@@ -55,6 +62,19 @@ section {
   margin-bottom:30px;
 }
 
+img.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#boidWithRangeDiv {
+  position:relative;
+  width:301px;
+  height:110px;
+  margin: 0 auto;
+}
+
 #boidsim {
   width:1000px;
   height:800px;
@@ -77,16 +97,10 @@ section {
   top:0;
 }
 
-#genomeChartDiv {
-}
-
 #fitnessChartDiv {
   position:absolute;
   right:0;
   top:0;
-}
-
-#fitnessChartDiv {
 }
 
 #allGenomesChartDiv {

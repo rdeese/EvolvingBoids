@@ -8,7 +8,7 @@
         <h2>An investivation of natural selection.</h2>
         
         <section>
-          <h3>"Why are living things so complex?"</h3>
+          <h3>Why are living things so complex?</h3>
           <p>Living things exhibit many complex behaviors, on a spectrum ranging from behaviors that seem instinctual,
               to those that seem intelligent. Scientific evidence suggests that these behaviors arise from Darwinian
               evolution. Evolution refers to the change of a species of living thing (dogs, cats, elephants, elm trees,
@@ -21,55 +21,116 @@
               biologists have identified that the development and maintenance of all living things on earth is controlled
               by a molecule called DNA.
           <p>The DNA of every organism consists of a unique sequence of base pairs, containing instructions that are read by the
-              organism's cells. This unique sequence of base pairs is called a <i>genome</i>. This genome determines many of the
-              characteristics of the organism: a collection of separate <i>traits</i> which all together are called the organism's
+              organism's cells. This unique sequence of base pairs is called a <i>genome</i>. This genome encodes
+              a collection of <i>traits</i> which all together are called the organism's
               <i>phenotype</i>. When living things reproduce, they pass their genotype on to their offspring. If the reproduction
-              is sexual, then their genotype is passed on in combination with the other parent, creating a blend of the two genotypes.
-              In either form of reproduction, the new offspring genotype is also subject to <i>mutation</i>, which makes small,
-              random changes to the new genotype. This new genotype will produce a new phenotype in the offspring, similar but not
-              identical to its parent(s).
+              is sexual, then the offspring's genotype is a blend of the two parents' genotypes.
+              The offspring genotype is also subject to <i>mutation</i>, which makes small,
+              random changes to it. Thus the offspring's genotype (and consequently phenotype) will be inherited from its parents.
           </p>
           <p>A living thing's phenotype largely determines the way it interacts with its environment, including whether it 
-              will live long enough to reproduce. Statistically, organisms that are more likely to reproduce will contribute
-              more offspring to the population than others--and remember that these offspring inherit their parent's genotype!
-              So, if an organism has a trait that makes it more able to reproduce, its genotype, which encodes that trait, appears
-              in a greater number of the collective offspring than other, less successful traits. This idea is really important;
-              in fact, it's the central idea of natural selection. It's common to use the word <i>fitness</i> to describe this concept,
-              meaning the likeliness of an individual to have more offspring than its peers, as determined by that individual's traits.
-              
-              To recap, the core observation of natural selection is as follows:
-          </p>
-          <p>
-            <i>The fitness of living things is determined by their genotype and their environment. Fitter organisms have genotypes that
-                produce phenotypes with certain advantageous traits, and as a result they have more offspring. These offspring
-                share their parent's genotype, causing the proportion of organisms with that genotype to increase.</i>
-          </p>
+              will live long enough to reproduce. We call an organism's ability to reproduce its <i>fitness</i>. Fitter organisms
+              will contribute more offspring to the population than others, making their genotypes more common in the population.
+              Since these genotypes produce phenotypes that were fitter in the first place, this tends to increase the fitness of
+              the population overall, as long as the environment doesn't change too much. This is the core of natural selection.
         </section>
         <section>
         <h3>The Blind Watchmaker</h3>
-        <p>In order for natural selection to work, the environment must put living things under some kind of pressure, such that
-            some traits lead to survival and reproduction more often than others. In addition, the living things need to reproduce
-            in some way such that traits are inherited. When those two conditions are met, fitter traits will spread in a population
-            of living things, while other traits will not. If the environment, which decides what "fitness" is, doesn't change that
-            much, the result of natural selection over time is to increase the average fitness of living things. Biologists all agree
-            that natural selection created every variety of living thing that has existed.
-        </p>
         <p>
+            Biologists all agree that natural selection created every variety of living thing that has existed.
           This claim may seem unbelievable: there is so much diversity, complexity, absurdity, and beauty in the natural world! 
-          Natural selection is like a blind watchmaker, assembling beautiful creatures that can grow hundreds of feet tall, live
-          at the bottom of the ocean, or communicate over hundreds of miles. And yet, nobody has been able to show that natural
-          selection could have produced all the living things that we see. In physics, theories can be clearly put to the test:
-          either a set of axioms explains and predicts events, or it does not. But natural selection cannot be tested in the same
-          way. To play back evolution on earth using natural selection, we would need to know in detail all of the environments,
-          all of the populations of living things, and all of the chance encounters! In short, it is at the present time impossible.
+          Natural selection seems as impossible as a blind watchmaker, assembling beautiful creatures that can grow hundreds of feet tall, live
+          at the bottom of the ocean, or communicate over hundreds of miles, all in the name of this boring concept of fitness.
+          Furthermore, nobody has been able to show that natural selection could have produced all the living things that we see.
+          In order to do that, we would need to know things about the environments, populations, and chance occurences of the distant past
+          (billions of years ago!) that are impossible to know. 
         </p>
         <p>
-          Yet, natural selection doesn't have to be taken on faith. There are many compelling arguments (similarity of all life forms
-          on earth, the fossil record, molecular genetics), but a fun one is creating a little environment, and little living things,
-          so that we can observe natural selection at work.
+          Even so, natural selection doesn't have to be taken on faith. There are many different kinds of evidence that support it,
+          and a lot of people happy to explain them. But I think that the funnest way to learn about natural selection is to watch
+          it happen right in front of you.
         </p>
         </section>
+        <section>
+          <h3>Creating a Model for Natural Selection</h3>
+          <p>If natural selection really does work, then we should be able to watch it happen if we create the right conditions.
+              We'll need:
+          </p>
+          <ul>
+            <li>living things that can reproduce and pass traits on to their offspring</li>
+            <li>an environment that favors some traits over others</li>
+          </ul>
+          <h4>The Living Things</h4>
           <p>
+            We'll call our living things "boids." (Like "birds," only in a thick New Jersey accent.) Our boids are little 
+            black dots, living in two dimensions. They are born, they move around their 2D world, and they die. The boids
+            have some physical limitations: they have a top speed and a top acceleration, and they can't stop moving. Most
+            importantly, the only things that they are aware of are the other boids near them.
+          </p>
+          <figure id=boidWithRangeDiv>
+            <canvas id=boidWithRange width=301 height=91>
+              No HTML5 Canvas support :(
+            </canvas>
+            <h5>A boid and its visible neighborhood</h5>
+          </figure>
+          <h4>Genotype and Phenotype</h4>
+          <p>
+            The phenotype of a boid is the way it moves, in response to its own movements and those of neighboring boids.
+            This phenotype is encoded into a genotype with five individual genes. These genes determine how the boid
+            moves (changes its acceleration) in response to:
+          </p>
+          <ol>
+            <li>its own acceleration</li>
+            <li>its own velocity</li>
+            <li>the difference between its acceleration and its neighbors' accelerations</li>
+            <li>the difference between its velocity and its neighbors' velocities</li>
+            <li>the difference between its position and its neighbors' positions</li>
+          </ol>
+          <figure>
+            <img src=boidgenome.png class=center width=147 height=32></img>
+            <h5>The boid genome</h5>
+          </figure>
+          <h4>Reproduction</h4>
+          <p>
+            Boids reproduce sexually. (Let's not go into the details.) Every new boid inherits its genome from a combination
+            of two parents' genomes, using a mechanism called crossover. After the two parents are chosen, a crossover point
+            is chosen randomly. The new boid gets the genes to the left of the crossover point from one parent, and the genes to
+            the right of the crossover point from the other. For example, if the crossover point was between genes 2 and 3, the
+            new boid would get genes 1 and 2 from one parent, and genes 3, 4, and 5 from the other. After crossover, every gene
+            in the new genome is randomly mutated by a small amount.
+          </p>
+          <p>
+            To simplify reproduction in our little boid-world, a new boid is born whenever a boid dies. The parents of this new
+            boid are chosen randomly from the set of all boids that have at least one neighbor. The new boid is born into the
+            world at a random location.
+          </p>
+          <h4>The Environment</h4>  
+          <p>
+            Our environment is a tough place for a boid. If two boids collide with one another, both boids die. In addition,
+            boids without any neighbors are not safe: if a boid isn't near any other boids, it has a one-in-twelve chance of
+            dying at any moment!
+          </p>
+        </section>
+        <section>
+        <h3>A Boid Experiment</h3>
+        <p>Now that our boids are fleshed out in our imaginations, let's bring them to life and see what happens!</p>
+        <h4>Hypothesis</h4>
+        <p>As far as we can tell, the boids and their environment have all the right conditions for natural selection.
+            So if we set loose some actual boids, we would hope to see natural selection take effect on the boid
+            population. What would be evidence of natural selection? We know that natural selection tends to increase
+            fitness in the population as long as the environment doesn't change, and our environment is constant. Also,
+            even though we don't know what the most fit genotype is, we know that if fitness is increasing, genotypes
+            similar to the fittest genotype must be becoming more common. If natural selection is happening, then:
+        </p>
+        <ul>
+          <li>the average fitness of the boid population will increase over time</li>
+          <li>the average genotype of the boid population will approach the most fit genotype, over time</li>
+        <ul>
+        <p>
+          Because of the random way that the parents of new boids are chosen, the only way a boid can guarantee to
+          have a lot of offspring is to stay alive as long as possible. Consequently, we'll use the average
+          lifetime of a boid as a proxy for fitness in our experiment.
+        </p>
           <div id="boidsim" width=1000 height=800>
             <canvas id="boidland" width="1000" height="400">
                 This text is displayed if your browser does not support HTML5 Canvas.
