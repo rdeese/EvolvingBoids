@@ -108,7 +108,11 @@
           <p>
             Our environment is a tough place for a boid. If two boids collide with one another, both boids die. In addition,
             boids without any neighbors are not safe: if a boid isn't near any other boids, it has a one-in-twelve chance of
-            dying at any moment!
+            dying at any moment.
+          </p>
+          <p>
+            Our environment has no boundaries: although we will see it as a 2D rectangle, the top edge wraps around
+            to the bottom edge, and the left edge to the right edge, making it a continuous space.
           </p>
         </section>
         <section>
@@ -119,48 +123,60 @@
             So if we set loose some actual boids, we would hope to see natural selection take effect on the boid
             population. What would be evidence of natural selection? We know that natural selection tends to increase
             fitness in the population as long as the environment doesn't change, and our environment is constant. Also,
-            even though we don't know what the most fit genotype is, we know that if fitness is increasing, genotypes
+            we know that if fitness is increasing, genotypes
             similar to the fittest genotype must be becoming more common. If natural selection is happening, then:
         </p>
         <ul>
+          <li>the phenotype (visible movement) of the boids will change over time</li>
           <li>the average fitness of the boid population will increase over time</li>
           <li>the average genotype of the boid population will approach the most fit genotype, over time</li>
-        <ul>
+        </ul>
+        <h4>Procedure</h4>
         <p>
-          Because of the random way that the parents of new boids are chosen, the only way a boid can guarantee to
-          have a lot of offspring is to stay alive as long as possible. Consequently, we'll use the average
-          lifetime of a boid as a proxy for fitness in our experiment.
+          In order to check our hypotheses, we'll create a boid-world to observe.
+          The boid-world below initially contains 120 boids, all with the same null genome. This genome corresponds
+          to a phenotype of no response to anything. The world will exist for around 3 minutes, and then start over 
+          again. The graphs below the boid-world show information about the average genome fitness in the world.
         </p>
-          <div id="boidsim" width=1000 height=800>
-            <canvas id="boidland" width="1000" height="400">
-                This text is displayed if your browser does not support HTML5 Canvas.
+        <p>
+          The top two graphs contain information about the current boid-world above, as it runs. 
+          The graph on the upper left shows the value of each gene in the average 
+          boid genome. The graph on the upper right shows the average age of all boids currently living. The x-axis represents
+          time. Once the world starts over, the contents of the top two graphs is added to the graphs below them.
+          The bottom graphs show the final top graphs of every past boid-world. 
+        </p>
+      </section>
+      <h5>The Boid-World</h5>
+      <div id="boidsim" width=1000 height=800>
+        <canvas id="boidland" width="1000" height="400">
+            This text is displayed if your browser does not support HTML5 Canvas.
+        </canvas>
+        <div id="boidcharts">
+          <div id="genomeChartDiv">
+            <h5>Current Genome</h5>
+            <canvas id="genomeChart" width="490" height="180">
+                No canvas support :(
             </canvas>
-            <div id="boidcharts">
-              <div id="genomeChartDiv">
-                <h5>Current Genome</h5>
-                <canvas id="genomeChart" width="490" height="180">
-                    No canvas support :(
-                </canvas>
-              </div>
-              <div id="fitnessChartDiv">
-                <h5>Current Fitness</h5>
-                <canvas id="fitnessChart" width="490" height="180">
-                    No canvas support :(
-                </canvas>
-              </div>
-              <div id="allGenomesChartDiv">
-                <h5>All Genomes</h5>
-                <canvas id="allGenomesChart" width="490" height="180">
-                    No canvas support :(
-                </canvas>
-              </div>
-              <div id="allFitnessesChartDiv">
-                <h5>All Fitnesses</h5>
-                <canvas id="allFitnessesChart" width="490" height="180">
-                    No canvas support :(
-                </canvas>
-              </div>
-            </div>
+          </div>
+          <div id="fitnessChartDiv">
+            <h5>Current Fitness</h5>
+            <canvas id="fitnessChart" width="490" height="180">
+                No canvas support :(
+            </canvas>
+          </div>
+          <div id="allGenomesChartDiv">
+            <h5>All Genomes</h5>
+            <canvas id="allGenomesChart" width="490" height="180">
+                No canvas support :(
+            </canvas>
+          </div>
+          <div id="allFitnessesChartDiv">
+            <h5>All Fitnesses</h5>
+            <canvas id="allFitnessesChart" width="490" height="180">
+                No canvas support :(
+            </canvas>
+          </div>
+        </div>
           </div>
           <img src=boideqn.png></img>
         <script type='text/javascript' src='chart.js'></script>
