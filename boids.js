@@ -1,10 +1,10 @@
-var canvasWidth = canvas.width;
-var canvasHeight = canvas.height;
 var frameRate = 120;
 var secondsPerDatapoint = 5;
 var numDataPoints = 30;
-var boidsContext = document.getElementById("canvas").getContext("2d");
-var info = document.getElementById("info");
+var boidsCanvas = document.getElementById("boidland");
+var boidsContext = boidsCanvas.getContext("2d");
+var canvasWidth = boidsCanvas.width;
+var canvasHeight = boidsCanvas.height;
 var genomeChartContext = document.getElementById("genomeChart").getContext("2d");
 var genomeChart;
 var fitnessChartContext = document.getElementById("fitnessChart").getContext("2d");
@@ -117,13 +117,14 @@ var allFitnessesChart = new Chart(allFitnessesChartContext).Line({
 });
 
 // everything is arbitrary!
+var boidSize = 3;
 var maxSpeed = 3;
 var minSpeed = 1;
 var maxAcceleration = 1;
-var neighborDistance = 60;
-var collisionDistance = 6;
+var neighborDistance = 40;
+var collisionDistance = 4;
 var velocitySameness = 2;
-var startingNumberOfBoids = 80;
+var startingNumberOfBoids = 120;
 var mutationFactor = 0.2;
 var lonelyDeathProbability = 0.08;
 
@@ -210,7 +211,7 @@ Flock.prototype = {
       // contribute to average age
       fitnessTotal += boid.age;
       // draw the updated boid
-      boidsContext.fillRect(boid.position.x, boid.position.y, 3, 3);
+      boidsContext.fillRect(boid.position.x, boid.position.y, boidSize, boidSize);
     }
 
     if (this.timestep % (secondsPerDatapoint*frameRate) == 0) {

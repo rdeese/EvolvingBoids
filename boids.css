@@ -1,0 +1,109 @@
+<style>
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  position:relative;
+  width:1000px;
+  margin: 0 auto;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif 
+}
+
+p {
+  margin-top:5px;
+}
+
+h3 {
+  position:relative;
+  left:-50px;
+  margin:0;
+  border:0;
+  padding:0;
+}
+
+h1 {
+  position:relative;
+  margin-top:50px;
+  margin-bottom:0px;
+  text-align:center;
+}
+
+
+h2 {
+  text-align:center;
+}
+
+h5 {
+  text-align:center;
+  margin:0;
+  border:0;
+  padding:0;
+  font-family:'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-size:12px;
+  font-style:thin;
+  color:#666;
+}
+
+section {
+  position:relative;
+  width:800px;
+  margin: 0 auto;
+  margin-top:30px;
+  margin-bottom:30px;
+}
+
+#boidsim {
+  width:1000px;
+  height:800px;
+  margin: 0 auto;
+  margin-top:20px;
+  margin-bottom:20px;
+}
+
+#boidcharts {
+  position:relative;
+  width:1000px;
+  height:400px;
+  margin-top:20px;
+  margin-bottom:20px;
+}
+
+#genomeChartDiv {
+  position:absolute;
+  left:0;
+  top:0;
+}
+
+#genomeChartDiv {
+}
+
+#fitnessChartDiv {
+  position:absolute;
+  right:0;
+  top:0;
+}
+
+#fitnessChartDiv {
+}
+
+#allGenomesChartDiv {
+  position:absolute;
+  left:0;
+  bottom:0;
+}
+
+#allFitnessesChartDiv {
+  position:absolute;
+  right:0;
+  bottom:0;
+}
+
+#boidland {
+  width:1000px;
+  height:400px;
+}
+
+</style>

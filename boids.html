@@ -1,25 +1,107 @@
 <html>
     <head>
         <title>Boids test</title>
+        <link rel="stylesheet" type="text/css" href="boids.css">
     </head>
     <body>
-        <canvas id="canvas" width="1000" height="600">
-            This text is displayed if your browser does not support HTML5 Canvas.
-        </canvas>
-        <canvas id="genomeChart" width="500" height="200">
-            No canvas support :(
-        </canvas>
-        <canvas id="fitnessChart" width="500" height="200">
-            No canvas support :(
-        </canvas>
-        <canvas id="allGenomesChart" width="500" height="200">
-            No canvas support :(
-        </canvas>
-        <canvas id="allFitnessesChart" width="500" height="200">
-            No canvas support :(
-        </canvas>
-        <div id="info"></div>
-        <img src=boideqn.png></img>
+        <h1>EVOLVING BOIDS</h1>
+        <h2>An investivation of natural selection.</h2>
+        
+        <section>
+          <h3>"Why are living things so complex?"</h3>
+          <p>Living things exhibit many complex behaviors, on a spectrum ranging from behaviors that seem instinctual,
+              to those that seem intelligent. Scientific evidence suggests that these behaviors arise from Darwinian
+              evolution. Evolution refers to the change of a species of living thing (dogs, cats, elephants, elm trees,
+              yeast) over time. The mechanism for this change is <i>natural selection</i>.</p>
+        </section>
+        <section>
+          <h3>Natural Selection</h3>
+          <p>Living things on earth are complex products of their ancestors, their contemporaries, and their environments,
+              so it would be incorrect to ascribe the appearance or behavior of any living thing to any one mechanism. However,
+              biologists have identified that the development and maintenance of all living things on earth is controlled
+              by a molecule called DNA.
+          <p>The DNA of every organism consists of a unique sequence of base pairs, containing instructions that are read by the
+              organism's cells. This unique sequence of base pairs is called a <i>genome</i>. This genome determines many of the
+              characteristics of the organism: a collection of separate <i>traits</i> which all together are called the organism's
+              <i>phenotype</i>. When living things reproduce, they pass their genotype on to their offspring. If the reproduction
+              is sexual, then their genotype is passed on in combination with the other parent, creating a blend of the two genotypes.
+              In either form of reproduction, the new offspring genotype is also subject to <i>mutation</i>, which makes small,
+              random changes to the new genotype. This new genotype will produce a new phenotype in the offspring, similar but not
+              identical to its parent(s).
+          </p>
+          <p>A living thing's phenotype largely determines the way it interacts with its environment, including whether it 
+              will live long enough to reproduce. Statistically, organisms that are more likely to reproduce will contribute
+              more offspring to the population than others--and remember that these offspring inherit their parent's genotype!
+              So, if an organism has a trait that makes it more able to reproduce, its genotype, which encodes that trait, appears
+              in a greater number of the collective offspring than other, less successful traits. This idea is really important;
+              in fact, it's the central idea of natural selection. It's common to use the word <i>fitness</i> to describe this concept,
+              meaning the likeliness of an individual to have more offspring than its peers, as determined by that individual's traits.
+              
+              To recap, the core observation of natural selection is as follows:
+          </p>
+          <p>
+            <i>The fitness of living things is determined by their genotype and their environment. Fitter organisms have genotypes that
+                produce phenotypes with certain advantageous traits, and as a result they have more offspring. These offspring
+                share their parent's genotype, causing the proportion of organisms with that genotype to increase.</i>
+          </p>
+        </section>
+        <section>
+        <h3>The Blind Watchmaker</h3>
+        <p>In order for natural selection to work, the environment must put living things under some kind of pressure, such that
+            some traits lead to survival and reproduction more often than others. In addition, the living things need to reproduce
+            in some way such that traits are inherited. When those two conditions are met, fitter traits will spread in a population
+            of living things, while other traits will not. If the environment, which decides what "fitness" is, doesn't change that
+            much, the result of natural selection over time is to increase the average fitness of living things. Biologists all agree
+            that natural selection created every variety of living thing that has existed.
+        </p>
+        <p>
+          This claim may seem unbelievable: there is so much diversity, complexity, absurdity, and beauty in the natural world! 
+          Natural selection is like a blind watchmaker, assembling beautiful creatures that can grow hundreds of feet tall, live
+          at the bottom of the ocean, or communicate over hundreds of miles. And yet, nobody has been able to show that natural
+          selection could have produced all the living things that we see. In physics, theories can be clearly put to the test:
+          either a set of axioms explains and predicts events, or it does not. But natural selection cannot be tested in the same
+          way. To play back evolution on earth using natural selection, we would need to know in detail all of the environments,
+          all of the populations of living things, and all of the chance encounters! In short, it is at the present time impossible.
+        </p>
+        <p>
+          Yet, natural selection doesn't have to be taken on faith. There are many compelling arguments (similarity of all life forms
+          on earth, the fossil record, molecular genetics), but a fun one is creating a little environment, and little living things,
+          so that we can observe natural selection at work.
+        </p>
+        </section>
+          <p>
+          <div id="boidsim" width=1000 height=800>
+            <canvas id="boidland" width="1000" height="400">
+                This text is displayed if your browser does not support HTML5 Canvas.
+            </canvas>
+            <div id="boidcharts">
+              <div id="genomeChartDiv">
+                <h5>Current Genome</h5>
+                <canvas id="genomeChart" width="490" height="180">
+                    No canvas support :(
+                </canvas>
+              </div>
+              <div id="fitnessChartDiv">
+                <h5>Current Fitness</h5>
+                <canvas id="fitnessChart" width="490" height="180">
+                    No canvas support :(
+                </canvas>
+              </div>
+              <div id="allGenomesChartDiv">
+                <h5>All Genomes</h5>
+                <canvas id="allGenomesChart" width="490" height="180">
+                    No canvas support :(
+                </canvas>
+              </div>
+              <div id="allFitnessesChartDiv">
+                <h5>All Fitnesses</h5>
+                <canvas id="allFitnessesChart" width="490" height="180">
+                    No canvas support :(
+                </canvas>
+              </div>
+            </div>
+          </div>
+          <img src=boideqn.png></img>
         <script type='text/javascript' src='chart.js'></script>
         <script type='text/javascript' src='boids.js'></script>
     </body>
