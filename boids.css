@@ -65,6 +65,13 @@ img.center {
   margin-right: auto;
 }
 
+#signature {
+  position:relative;
+  margin: 0 auto;
+  margin-top:100px;
+  margin-bottom:100px;
+}
+
 #boidWithRangeDiv {
   position:relative;
   width:301px;

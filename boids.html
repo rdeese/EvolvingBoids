@@ -5,7 +5,7 @@
     </head>
     <body>
         <h1>EVOLVING BOIDS</h1>
-        <h2>An investivation of natural selection.</h2>
+        <h2>An investigation of natural selection.</h2>
         
         <section>
           <h3>Why are living things so complex?</h3>
@@ -76,19 +76,27 @@
           <h4>Genotype and Phenotype</h4>
           <p>
             The phenotype of a boid is the way it moves, in response to its own movements and those of neighboring boids.
-            This phenotype is encoded into a genotype with five individual genes. These genes determine how the boid
-            moves (changes its acceleration) in response to:
+            This phenotype is encoded into a genotype with five individual genes. Each gene is a decimal number. These
+            genes determine how the boid moves (changes its acceleration), in response to five different properties of
+            itself and its environment. The genes and the properties they control the response to are as follows:
           </p>
           <ol>
-            <li>its own acceleration</li>
-            <li>its own velocity</li>
-            <li>the difference between its acceleration and its neighbors' accelerations</li>
-            <li>the difference between its velocity and its neighbors' velocities</li>
-            <li>the difference between its position and its neighbors' positions</li>
+            <li>the boid's acceleration</li>
+            <li>the boid's velocity</li>
+            <li>the difference between the boid's acceleration and its neighbors' accelerations</li>
+            <li>the difference between the boid's velocity and its neighbors' velocities</li>
+            <li>the difference between the boid's position and its neighbors' positions</li>
           </ol>
           <figure>
-            <img src=boidgenome.png class=center width=147 height=32></img>
+            <img src=boidgenome.png class=center width=171 height=46></img>
             <h5>The boid genome</h5>
+          </figure>
+          <p>
+            Specifically, the boid decides its new acceleration at every moment using the following formula:
+          </p>
+          <figure>
+            <img src=boideqn.png class=center width=743 height=339></img>
+            <h5>The boid's governing equation.</h5>
           </figure>
           <h4>Reproduction</h4>
           <p>
@@ -116,69 +124,156 @@
           </p>
         </section>
         <section>
-        <h3>A Boid Experiment</h3>
-        <p>Now that our boids are fleshed out in our imaginations, let's bring them to life and see what happens!</p>
-        <h4>Hypothesis</h4>
-        <p>As far as we can tell, the boids and their environment have all the right conditions for natural selection.
-            So if we set loose some actual boids, we would hope to see natural selection take effect on the boid
-            population. What would be evidence of natural selection? We know that natural selection tends to increase
-            fitness in the population as long as the environment doesn't change, and our environment is constant. Also,
-            we know that if fitness is increasing, genotypes
-            similar to the fittest genotype must be becoming more common. If natural selection is happening, then:
-        </p>
-        <ul>
-          <li>the phenotype (visible movement) of the boids will change over time</li>
-          <li>the average fitness of the boid population will increase over time</li>
-          <li>the average genotype of the boid population will approach the most fit genotype, over time</li>
-        </ul>
-        <h4>Procedure</h4>
-        <p>
-          In order to check our hypotheses, we'll create a boid-world to observe.
-          The boid-world below initially contains 120 boids, all with the same null genome. This genome corresponds
-          to a phenotype of no response to anything. The world will exist for around 3 minutes, and then start over 
-          again. The graphs below the boid-world show information about the average genome fitness in the world.
-        </p>
-        <p>
-          The top two graphs contain information about the current boid-world above, as it runs. 
-          The graph on the upper left shows the value of each gene in the average 
-          boid genome. The graph on the upper right shows the average age of all boids currently living. The x-axis represents
-          time. Once the world starts over, the contents of the top two graphs is added to the graphs below them.
-          The bottom graphs show the final top graphs of every past boid-world. 
-        </p>
-      </section>
-      <h5>The Boid-World</h5>
-      <div id="boidsim" width=1000 height=800>
-        <canvas id="boidland" width="1000" height="400">
-            This text is displayed if your browser does not support HTML5 Canvas.
-        </canvas>
-        <div id="boidcharts">
-          <div id="genomeChartDiv">
-            <h5>Current Genome</h5>
-            <canvas id="genomeChart" width="490" height="180">
-                No canvas support :(
-            </canvas>
-          </div>
-          <div id="fitnessChartDiv">
-            <h5>Current Fitness</h5>
-            <canvas id="fitnessChart" width="490" height="180">
-                No canvas support :(
-            </canvas>
-          </div>
-          <div id="allGenomesChartDiv">
-            <h5>All Genomes</h5>
-            <canvas id="allGenomesChart" width="490" height="180">
-                No canvas support :(
-            </canvas>
-          </div>
-          <div id="allFitnessesChartDiv">
-            <h5>All Fitnesses</h5>
-            <canvas id="allFitnessesChart" width="490" height="180">
-                No canvas support :(
-            </canvas>
+          <h3>A Boid Experiment</h3>
+          <p>Now that our boids are fleshed out in our imaginations, let's bring them to life and see what happens!</p>
+          <h4>Hypothesis</h4>
+          <p>As far as we can tell, the boids and their environment have all the right conditions for natural selection.
+              So if we set loose some actual boids, we would hope to see natural selection take effect on the boid
+              population. What would be evidence of natural selection? We know that natural selection tends to increase
+              fitness in the population as long as the environment doesn't change, and our environment is constant. Also,
+              we know that if fitness is increasing, genotypes
+              similar to the fittest genotype must be becoming more common. If natural selection is happening, then:
+          </p>
+          <ul>
+            <li>the phenotype (visible movement) of the boids will change over time</li>
+            <li>the average fitness of the boid population will increase over time</li>
+            <li>the average genotype of the boid population will approach the most fit genotype, over time</li>
+          </ul>
+          <h4>Procedure</h4>
+          <p>
+            In order to check our hypotheses, we'll create a boid-world to observe.
+            The boid-world below initially contains 120 boids, all with the same null genome. This genome corresponds
+            to a phenotype of no response to anything. The world will exist for around 3 minutes, and then start over 
+            again. The graphs show information about the average genome and fitness of the boids.
+          </p>
+          <p>
+            The top two graphs contain information about the current boid-world above, as it runs. 
+            The graph on the upper left shows the value of each gene in the average 
+            boid genome. The graph on the upper right shows the average age of all boids currently living. The x-axis represents
+            time. Once the world starts over, the contents of the top two graphs is added to the graphs below them.
+            The bottom graphs show the final top graphs of every past boid-world. 
+          </p>
+          <p>
+            Watch the boids for a while, or just leave this page open in the background for 10 minutes or so, to gather
+            results from a few separate boid worlds.
+          </p>
+        </section>
+        <h5>The Boid-World</h5>
+        <div id="boidsim" width=1000 height=800>
+          <canvas id="boidland" width="1000" height="400">
+              This text is displayed if your browser does not support HTML5 Canvas.
+          </canvas>
+          <div id="boidcharts">
+            <div id="genomeChartDiv">
+              <h5>Current Genome</h5>
+              <canvas id="genomeChart" width="490" height="180">
+                  No canvas support :(
+              </canvas>
+            </div>
+            <div id="fitnessChartDiv">
+              <h5>Current Fitness</h5>
+              <canvas id="fitnessChart" width="490" height="180">
+                  No canvas support :(
+              </canvas>
+            </div>
+            <div id="allGenomesChartDiv">
+              <h5>All Genomes</h5>
+              <canvas id="allGenomesChart" width="490" height="180">
+                  No canvas support :(
+              </canvas>
+            </div>
+            <div id="allFitnessesChartDiv">
+              <h5>All Fitnesses</h5>
+              <canvas id="allFitnessesChart" width="490" height="180">
+                  No canvas support :(
+              </canvas>
+            </div>
           </div>
         </div>
-          </div>
-          <img src=boideqn.png></img>
+        <section>
+          <h3>Observations</h3>
+          <p>
+            If you've let our little experiment run for a while, you've probably noticed that:
+          </p>
+          <ul>
+            <li>The behavior of the boids, which looks random when a world begins, looks different
+                after a few minutes. More interestingly, the boids develop very similar behavior in every
+                successive world! Personally, their behavior reminds me of birds flocking.</li>
+            <li>In every world, the average age of living boids increases over time.</li>
+            <li>The average genome doesn't stay the same, and the final values of certain genes, especially genes
+                3 and 4, tend to be the same in every world.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Conclusions</h3>
+          <p>
+            Let's remind ourselves of our three hypotheses:
+          </p>
+          <ul>
+            <li>the phenotype (visible movement) of the boids will change over time</li>
+            <li>the average fitness of the boid population will increase over time</li>
+            <li>the average genotype of the boid population will approach the most fit genotype, over time</li>
+          </ul>
+          <p>
+            What does the boid experiment say about our hypotheses? The conclusions are yours to draw,
+            but I'll leave you with a few of my own thoughts.
+          </p>
+          <h4>Visible Behavior</h4>
+          <p>
+            Our first hypothesis involved observing the boids to see if their behavior changed over time.
+            "Changed" is a very qualitative measure, but some qualitative measures are very powerful and
+            intuitive for us humans. For example, you probably don't need a microscope to tell if something
+            is alive or not. You can just <i>tell</i> somehow. How would you describe the boids' behavior,
+            at the beginning of each world and at the end?
+          </p>
+          <h4>Measuring Fitness</h4>
+          <p>
+            In the boid-world, boid parents are chosen randomly amongst living boids. Therefore,
+            The only way for a boid to increase its number of offspring is to stay alive for as
+            long as possible, to increase the number of times it is chosen! So, the average age
+            of living boids might be a good measure of the boids' average fitness.
+          </p>
+          <h4>The Fittest Boid Genotype</h4>
+          <p>
+            I don't know of a way to figure out what the fittest boid genotype is, even though
+            I might have some intuition about it. What do you think? Even if we don't know what
+            the fittest genotype is, if different boid worlds seem to be heading to the same
+            genotype, and the average fitness in all of those worlds is increasing, what can
+            we conclude?
+          </p>
+          <h4>Repeatability</h4>
+          <p>
+            There is a lot of randomness in the boid-world: random starting configuration, random
+            selection of parents, crossover, and mutation. Is it surprising that the boid-world
+            consistently develops in the same way? If the development of many separate boid worlds
+            is the same, does that give us more confidence that our observations are valid?
+          </p>
+        </section>
+        <section>
+          <h3>If it walks like a duck...</h3>
+          <p>
+            We've taken a small journey exploring the idea of natural selection, and how it might
+            relate to living things on earth. I hope you've enjoyed it--I certainly did. If the way
+            the boids behaved seems at all lifelike to you, I think it's interesting to ask the question:
+          </p>
+          <blockquote>
+            <i>"What does it mean for something to be alive?"</i>
+          </blockquote>
+          <p>
+            If natural selection is at work amongst the living things on this planet,
+            and you saw natural selection work on the boids, what is the difference between boids and
+            the things that we usually call "living?" Certainly DNA-based life is more complex, but
+            is that what matters? The boids changed over time to become more fit in their environment,
+            and complex behavior emerged from chaotic behavior. Might that be what life is about?
+          </p>
+          <p>
+            As the saying goes, "if it walks like a duck, swims like a duck, and quacks like a duck,
+            call it a duck."
+          </p>  
+            
+        <div id=signature>
+          <h5>Article and Code by Rupert Deese // <a href="http://rupertdeese.com">rupertdeese.com</a> // @rupehart</h5>
+        </div>
         <script type='text/javascript' src='chart.js'></script>
         <script type='text/javascript' src='boids.js'></script>
     </body>

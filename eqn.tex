@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[22pt]{article}
 
 \usepackage{xcolor}
 \usepackage{amsmath}
@@ -19,13 +19,14 @@
 
 \begin{document}
 $$a^{+} = a + \mathcolor{maroon}{g_1}a + \mathcolor{red}{g_2}v + \frac {1} {\lvert N \rvert} \sum_{x \in N}\bigg(\mathcolor{green}{g_3}(a_x-a)+\mathcolor{blue}{g_4}(v_x-v)+\mathcolor{teal}{g_5}(p_x-p)\bigg)$$
-where:\\
+where:
 \begin{align*}
-p&~ \text{is the boid's position}\\
+a&~ \text{is the boid's acceleration}\\
 v&~ \text{is its velocity}\\
-a&~ \text{is its acceleration}\\
+p&~ \text{is its position}\\
 N&~ \text{is the set of neighboring boids}\\
-\{g_1, \ldots, g_5\}&~ \text{is the genome of the boid}
+x&~ \text{is a particular neighbor}\\
+a^{+}&~ \text{is the boid's new acceleration}
 \end{align*}
 
 $$\{ \mathcolor{maroon}{g_1}, \mathcolor{red}{g_2}, \mathcolor{green}{g_3}, \mathcolor{blue}{g_4}, \mathcolor{teal}{g_5} \}$$ 
